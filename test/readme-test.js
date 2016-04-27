@@ -1,30 +1,30 @@
-import expression from "subschema-expression";
-import expect from "expect";
+var expression = require('..').default;
+var expect = require('expect');
 
 describe('expression/Readme', function () {
 
     it('should exec example 1', function () {
 
-        const exprObj = expression('hello {world}');
+        var exprObj = expression('hello {world}');
 
-        const str = exprObj.format({
+        var str = exprObj.format({
             world: 'Joe'
         });
 
         expect(str).toBe('hello Joe');
     });
     it('should exec example 2', function () {
-        const exprObj = expression('hello {comma(you, "me")} and {uppercase(world)}');
+        var exprObj = expression('hello {comma(you, "me")} and {uppercase(world)}');
 
-        const str = exprObj.format({
+        var str = exprObj.format({
             world: 'Joe',
             you: 'Bob'
         }, {
-            uppercase(f){
+            uppercase:function(f){
                 return f == null ? '' : f.toUpperCase()
             },
-            comma(...args){
-                return args.join(', ');
+            comma:function(){
+                return Array.prototype.join.call(arguments,', ');
             }
         });
 
@@ -33,15 +33,15 @@ describe('expression/Readme', function () {
 
     it('should exec example 3', function () {
 
-        const exprObj = expression('hello {uppercase(name.first)} and {name.last}');
+        var exprObj = expression('hello {uppercase(name.first)} and {name.last}');
 
-        const str = exprObj.format({
+        var str = exprObj.format({
             name: {
                 first: 'Joe',
                 last: 'Bob'
             }
         }, {
-            uppercase(f){
+            uppercase:function(f){
                 return f == null ? '' : f.toUpperCase()
             }
         });
@@ -49,16 +49,16 @@ describe('expression/Readme', function () {
         expect(str).toBe('hello JOE and Bob');
     });
 
-    it ('should exec example 4', function(){
+    it('should exec example 4', function () {
 
 
-        const exprObj = expression('hello {uppercase(name.first)} and {name.last}');
-        const formatters = {
+        var exprObj = expression('hello {uppercase(name.first)} and {name.last}');
+        var formatters = {
             uppercase(f){
                 return f == null ? '' : f.toUpperCase()
             }
         };
-        let str = exprObj.format({
+        var str = exprObj.format({
             name: {
                 first: 'Joe',
                 last: 'Bob'
