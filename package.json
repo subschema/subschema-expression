@@ -1,6 +1,6 @@
 {
   "name": "subschema-expression",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Expressions for subschema",
   "main": "dist/expression.js",
   "directories": {
