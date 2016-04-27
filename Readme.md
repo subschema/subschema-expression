@@ -135,19 +135,20 @@ caution.
 
 ```es6
         import expression from 'subschema-expression';
+        import loscape from 'lodash/string/escape';
 
         const exprObj = expression('hello {h1(name.first)}');
         const formatters = {
             h1(f){
-                return `--<h1>${f == null ? '' : escape(f.toUpperCase())}</h1>--`;
+                return `--<h1>${f == null ? '' : loscape(f.toUpperCase())}</h1>--`;
             }
         };
         let str = exprObj.format({
             name: {
-                first: 'Joe',
+                first: 'Joe<B/>',
                 last: 'Bob'
             }
         }, formatters);
-        //str is hello <h1>JOE</h1>
+        //str is hello<h1>JOE&lt;B/&gt;</h1>
 
 ```

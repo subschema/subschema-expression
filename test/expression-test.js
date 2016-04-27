@@ -1,6 +1,5 @@
 var expect = require('expect');
 var expression = require('..').default;
-
 function junk(obj) {
     obj = obj || {};
     return '' + (escape($fns.stuff(loget(obj, 'name')))) + ' ' + (escapeGet(obj, 'other')) + ''

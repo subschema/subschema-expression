@@ -1,5 +1,6 @@
 var expression = require('..').default;
 var expect = require('expect');
+var loscape = require('lodash/string/escape');
 
 describe('expression/Readme', function () {
 
@@ -84,16 +85,16 @@ describe('expression/Readme', function () {
         var exprObj = expression('hello {h1(name.first)}');
         var formatters = {
             h1(f){
-                return `--<h1>${f == null ? '' : escape(f.toUpperCase())}</h1>--`;
+                return `--<h1>${f == null ? '' : loscape(f.toUpperCase())}</h1>--`;
             }
         };
         var str = exprObj.format({
             name: {
-                first: 'Joe',
+                first: 'Joe<b/>',
                 last: 'Bob'
             }
         }, formatters);
         //str is hello <h1>JOE</h1>
-        expect(str).toBe('hello <h1>JOE</h1>');
+        expect(str).toBe('hello <h1>JOE&lt;B/&gt;</h1>');
     })
 });
