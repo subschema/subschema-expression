@@ -50,4 +50,11 @@ describe('expression', function () {
         expect(value).toBe(" \"cruel <b>is cool</b>", 'substitute the value');
     });
 
+    it('should allow no expressions', function(){
+        var res = expression('<b>what</b>');
+        expect(res.listen.length).toBe(0, 'check length of listen')
+        expect(res.formatters.length).toBe(0, 'no formatters');
+        var value = res.format({hello: '<h1>joe</h1>', world: 'is cool'});
+        expect(value).toBe("<b>what</b>", 'substitute the value');
+    });
 });
