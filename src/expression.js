@@ -27,6 +27,13 @@ function addArg(obj, key) {
 function toArg(v) {
     return isQuoted(v) ? v : `loget(obj, '${v}')`;
 }
+function maybeEscape(v) {
+    const parts = /^--(.*?)--$/.exec(v);
+    if (parts) {
+        return parts[1];
+    }
+    return escape(v);
+}
 export default function substitute(str) {
 
     if (str == null) {
@@ -44,15 +51,16 @@ export default function substitute(str) {
             args.reduce(addArg, checks);
             key = `$fns.${f[1]}(${(args.map(toArg).join(', '))})`;
 
-            return `${content}'+(escape(${key}))+'`;
+            return `${content}'+(maybeEscape(${key}))+'`;
 
         } else {
             checks[key] = true;
             return `${content}'+(escapeGet(obj, '${key}'))+'`;
         }
     }
+
     const source = "obj = obj || {}; return \'" + (str.replace(/(.*?)\{([^\{\}]*)\}/g, substitute$inner)) + "'";
-    const format = new Function('escapeGet', 'loget', 'escape', 'obj', '$fns', source).bind(null, escapeGet, loget, escape);
+    const format = new Function('escapeGet', 'loget', 'escape', 'maybeEscape', 'obj', '$fns', source).bind(null, escapeGet, loget, escape, maybeEscape);
     const listen = Object.keys(checks);
     const formatters = Object.keys(funcs);
     return {

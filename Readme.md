@@ -125,3 +125,29 @@ An expression once compiled is reusable.
         //str is hello BILLY and Joe
 
 ```
+
+
+### Dangerous Expressions.
+You may want a formatter to return html.  Well I can't stop you, but
+if you do, you can return a string wrapped with '--' and it will not escape
+its output.   Its up to you to sanitize the input in this case. Please use
+caution.
+
+```es6
+        import expression from 'subschema-expression';
+
+        const exprObj = expression('hello {h1(name.first)}');
+        const formatters = {
+            h1(f){
+                return `--<h1>${f == null ? '' : escape(f.toUpperCase())}</h1>--`;
+            }
+        };
+        let str = exprObj.format({
+            name: {
+                first: 'Joe',
+                last: 'Bob'
+            }
+        }, formatters);
+        //str is hello <h1>JOE</h1>
+
+```

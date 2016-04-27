@@ -76,6 +76,24 @@ describe('expression/Readme', function () {
 
         //str is hello BILLY and Joe
         expect(str).toBe('hello BILLY and Joe')
-    })
+    });
+    it('should exec example 5', function () {
 
+
+
+        var exprObj = expression('hello {h1(name.first)}');
+        var formatters = {
+            h1(f){
+                return `--<h1>${f == null ? '' : escape(f.toUpperCase())}</h1>--`;
+            }
+        };
+        var str = exprObj.format({
+            name: {
+                first: 'Joe',
+                last: 'Bob'
+            }
+        }, formatters);
+        //str is hello <h1>JOE</h1>
+        expect(str).toBe('hello <h1>JOE</h1>');
+    })
 });
