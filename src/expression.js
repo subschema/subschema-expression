@@ -25,7 +25,7 @@ function addArg(obj, key) {
 }
 
 function toArg(v) {
-    return isQuoted(v) ? v : `loget(obj, '${v}')`;
+    return isQuoted(v) ? v : `loget(obj, ${JSON.stringify(v)})`;
 }
 function maybeEscape(v) {
     const parts = /^--(.*?)--$/.exec(v);
@@ -34,6 +34,18 @@ function maybeEscape(v) {
     }
     return escape(v);
 }
+var reNoMatch = /($^)/;
+var reEsTemplate = /\{([^\\}]*(?:\\.[^\\}]*)*)\}/g;
+
+var reDelimiters = RegExp(
+    reNoMatch.source + '|' +
+    reEsTemplate.source +
+    '|(.*)'
+
+    + '|$'
+
+    , 'g');
+var reexpr = /\{([^\\}]*(?:\\.[^\\}]*)*)\}|$/g
 export default function substitute(str) {
 
     if (str == null) {
@@ -42,8 +54,15 @@ export default function substitute(str) {
     const checks = {};
     const funcs = {};
 
-    function substitute$inner(v, content, key) {
-        content = content.replace(/'/g, "\\'");
+    let source = "obj = obj || {}; return ";
+    let prevIdx = 0;
+
+    function substitute$inner(match, key, offset) {
+
+        const content = JSON.stringify(str.substring(prevIdx, offset));
+        if (key) {
+            prevIdx = (offset + match.length);
+        }
         const f = /\s*(\w+?)\s*\(\s*([^)]+?)\s*\)/.exec(key);
         if (f) {
             funcs[f[1]] = true;
@@ -51,15 +70,19 @@ export default function substitute(str) {
             args.reduce(addArg, checks);
             key = `$fns.${f[1]}(${(args.map(toArg).join(', '))})`;
 
-            return `${content}'+(maybeEscape(${key}))+'`;
+            source += `${content}+(maybeEscape(${key}))+`;
 
-        } else {
+        } else if (key) {
             checks[key] = true;
-            return `${content}'+(escapeGet(obj, '${key}'))+'`;
+            source += `${content}+(escapeGet(obj, ${JSON.stringify(key)}))+`;
+        } else {
+            source += `${content}+`;
         }
     }
 
-    const source = "obj = obj || {}; return \'" + (str.replace(/(.*?)\{([^\{\}]*)\}/g, substitute$inner)) + "'";
+    str.replace(reexpr, substitute$inner);
+
+    source += '""';
     const format = new Function('escapeGet', 'loget', 'escape', 'maybeEscape', 'obj', '$fns', source).bind(null, escapeGet, loget, escape, maybeEscape);
     const listen = Object.keys(checks);
     const formatters = Object.keys(funcs);

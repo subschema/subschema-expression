@@ -1,4 +1,4 @@
-var expression = require('..').default;
+var expression = require('../dist/expression').default;
 var expect = require('expect');
 var loscape = require('lodash/string/escape');
 

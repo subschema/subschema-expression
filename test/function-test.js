@@ -1,5 +1,5 @@
 var expect = require('expect');
-var expression = require('..').default;
+var expression = require('../dist/expression').default;
 
 
 describe('expression/function', function () {
