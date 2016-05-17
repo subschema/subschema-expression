@@ -152,3 +152,19 @@ caution.
         //str is hello<h1>JOE&lt;B/&gt;</h1>
 
 ```
+
+### Running Karma
+So sometimes its nice to run karma for debugging.  To do so
+you will need to change test/*-test.js from
+```js
+  var expression = require('../dist/expression');
+```
+to
+
+```js
+   var expression = require('subschema-expression');
+```
+
+```sh
+$ npm run karma
+```
