@@ -16,7 +16,9 @@ function isQuoted(v) {
     }
     return false;
 }
-
+function requote(v) {
+    return JSON.stringify(v.substring(1, v.length - 1));
+}
 function addArg(obj, key) {
     if (!isQuoted(key)) {
         obj[key] = true;
@@ -25,7 +27,7 @@ function addArg(obj, key) {
 }
 
 function toArg(v) {
-    return isQuoted(v) ? v : `loget(obj, ${JSON.stringify(v)})`;
+    return isQuoted(v) ? requote(v) : `loget(obj, ${JSON.stringify(v)})`;
 }
 function maybeEscape(v) {
     const parts = /^--(.*?)--$/.exec(v);
@@ -59,7 +61,7 @@ export default function substitute(str) {
 
     function substitute$inner(match, key, offset) {
 
-        const content = JSON.stringify(str.substring(prevIdx, offset));
+        const content = `${JSON.stringify(str.substring(prevIdx, offset))}+`;
         if (key) {
             prevIdx = (offset + match.length);
         }
@@ -70,13 +72,13 @@ export default function substitute(str) {
             args.reduce(addArg, checks);
             key = `$fns.${f[1]}(${(args.map(toArg).join(', '))})`;
 
-            source += `${content}+(maybeEscape(${key}))+`;
+            source += `${content}(maybeEscape(${key}))+`;
 
         } else if (key) {
             checks[key] = true;
-            source += `${content}+(escapeGet(obj, ${JSON.stringify(key)}))+`;
+            source += `${content}(escapeGet(obj, ${JSON.stringify(key)}))+`;
         } else {
-            source += `${content}+`;
+            source += `${content}`;
         }
     }
 
