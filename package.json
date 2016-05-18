@@ -27,6 +27,9 @@
     "url": "https://github.com/subschema/subschema-expression/issues"
   },
   "homepage": "https://github.com/subschema/subschema-expression#readme",
+  "peerDependencies": {
+    "lodash": "^3.10.1"
+  },
   "devDependencies": {
     "babel": "^6.5.2",
     "babel-cli": "^6.9.0",
@@ -40,7 +43,6 @@
     "karma-babel-preprocessor": "^6.0.1",
     "karma-mocha": "^1.0.1",
     "karma-webpack": "^1.7.0",
-    "lodash": "^3.10.1",
     "mocha": "^2.4.5",
     "webpack": "^1.13.0"
   }
