@@ -36,17 +36,7 @@ function maybeEscape(v) {
     }
     return escape(v);
 }
-var reNoMatch = /($^)/;
-var reEsTemplate = /\{([^\\}]*(?:\\.[^\\}]*)*)\}/g;
 
-var reDelimiters = RegExp(
-    reNoMatch.source + '|' +
-    reEsTemplate.source +
-    '|(.*)'
-
-    + '|$'
-
-    , 'g');
 var reexpr = /\{([^\\}]*(?:\\.[^\\}]*)*)\}|$/g
 export default function substitute(str) {
 
