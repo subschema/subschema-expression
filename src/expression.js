@@ -10,7 +10,7 @@ function escapeGet(obj, key) {
 function isQuoted(v) {
     if (!v) return false;
 
-    var first = v[0], last = v[v.length - 1];
+    const first = v[0], last = v[v.length - 1];
     if (first === '"' && last === '"' || first === "'" && last === "'") {
         return true;
     }
@@ -37,7 +37,8 @@ function maybeEscape(v) {
     return escape(v);
 }
 
-var reexpr = /\{([^\\}]*(?:\\.[^\\}]*)*)\}|$/g
+const reexpr = /\{([^\\}]*(?:\\.[^\\}]*)*)\}|$/g;
+
 export default function substitute(str) {
 
     if (str == null) {
@@ -51,7 +52,7 @@ export default function substitute(str) {
 
     function substitute$inner(match, key, offset) {
 
-        const content = `${JSON.stringify(str.substring(prevIdx, offset))}+`;
+        source += `${JSON.stringify(str.substring(prevIdx, offset))}+`;
         if (key) {
             prevIdx = (offset + match.length);
         }
@@ -62,13 +63,11 @@ export default function substitute(str) {
             args.reduce(addArg, checks);
             key = `$fns.${f[1]}(${(args.map(toArg).join(', '))})`;
 
-            source += `${content}(maybeEscape(${key}))+`;
+            source += `(maybeEscape(${key}))+`;
 
         } else if (key) {
             checks[key] = true;
-            source += `${content}(escapeGet(obj, ${JSON.stringify(key)}))+`;
-        } else {
-            source += `${content}`;
+            source += `(escapeGet(obj, ${JSON.stringify(key)}))+`;
         }
     }
 
