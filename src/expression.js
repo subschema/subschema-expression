@@ -1,7 +1,7 @@
 "use strict";
 
-import escape from "lodash/string/escape";
-import loget from "lodash/object/get";
+import escape from "lodash/escape";
+import loget from "lodash/get";
 
 function escapeGet(obj, key) {
     return escape(loget(obj, key, ''));

@@ -1,6 +1,6 @@
 var expression = require('../dist/expression').default;
 var expect = require('expect');
-var loscape = require('lodash/string/escape');
+var loscape = require('lodash/escape');
 
 describe('expression/Readme', function () {
 
