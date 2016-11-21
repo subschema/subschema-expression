@@ -9,7 +9,6 @@
   "scripts": {
     "dist": "babel -s true src --out-dir dist",
     "test": "npm run dist && mocha test/*-test.js",
-    "karma": "karma start --browsers Chrome --no-single-run",
     "prepublish": "npm run dist",
     "preversion": "npm run test"
   },
@@ -37,12 +36,7 @@
     "babel-preset-es2015": "^6.9.0",
     "babel-preset-es2015-loose": "^7.0.0",
     "expect": "^1.18.0",
-    "karma": "^1.3.0",
-    "karma-babel-preprocessor": "^6.0.1",
-    "karma-mocha": "^1.0.1",
-    "karma-webpack": "^1.8.0",
-    "mocha": "^2.4.5",
-    "webpack": "^1.13.0"
+    "mocha": "^2.4.5"
   },
   "dependencies": {
     "lodash": "^4.16.4"
